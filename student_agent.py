@@ -32,7 +32,7 @@ def get_action(obs):
     # Check if the state key exists in the Q-table.
     if state_key in qt:
         # Exploit: select the action with the highest Q-value.
-        action = int(np.argmax(qt[state_key]))
+        action = int(np.argmax(np.array(q_table[state_key])))
     else:
         # Fallback: choose a random action if the state is not present.
         action = random.choice([0, 1, 2, 3, 4, 5])
