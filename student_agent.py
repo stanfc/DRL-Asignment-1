@@ -8,7 +8,13 @@ def get_state(obs):
     taxi_row, taxi_col, s1x, s1y, s2x, s2y, s3x, s3y, s4x, s4y, obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look,destination_look = obs
     sxs = [s1x, s2x, s3x, s4x]
     sys = [s1y, s2y, s3y, s4y]
-    return (obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
+    grid_size = max(sys) + 1
+    at_edge = taxi_row == 0 or taxi_row == grid_size - 1 or taxi_col == 0 or taxi_col == grid_size - 1
+    at_right_edge = taxi_row == grid_size - 1
+    at_left_edge = taxi_row == 0
+    at_up_edge = taxi_col == 0
+    at_down_edge = taxi_col == grid_size -1
+    return (at_right_edge, at_left_edge, at_down_edge, at_up_edge, obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
 
 # Global variable to store the Q-table.
 q_table = None
