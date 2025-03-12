@@ -14,7 +14,7 @@ def get_state(obs):
     at_left_edge = taxi_row == 0
     at_up_edge = taxi_col == 0
     at_down_edge = taxi_col == grid_size -1
-    return (at_right_edge, at_left_edge, at_down_edge, at_up_edge, obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
+    return (obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
 
 # Global variable to store the Q-table.
 q_table = None
