@@ -5,8 +5,10 @@ import random
 import gym
 
 def get_state(obs):
-    taxi_row, taxi_col, _,_,_,_,_,_,_,_,obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look,destination_look = obs
-    return (obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
+    taxi_row, taxi_col, s1x, s1y, s2x, s2y, s3x, s3y, s4x, s4y, obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look,destination_look = obs
+    sxs = [s1x, s2x, s3x, s4x]
+    sys = [s1y, s2y, s3y, s4y]
+    return (taxi_row, taxi_col, max(sxs) - min(sxs), max(sxs) - min(sys), obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
 
 # Global variable to store the Q-table.
 q_table = None
