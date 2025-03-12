@@ -6,7 +6,7 @@ import gym
 
 def get_state(obs):
     taxi_row, taxi_col, _,_,_,_,_,_,_,_,obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look,destination_look = obs
-    return (taxi_row, taxi_col, obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
+    return (obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
 
 # Global variable to store the Q-table.
 q_table = None
