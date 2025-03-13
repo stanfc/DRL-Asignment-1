@@ -17,7 +17,7 @@ def get_state(obs):
     at_down_edge = taxi_col == grid_size -1
     norm_taxi_row = taxi_row / grid_size
     norm_taxi_col = taxi_col / grid_size
-    scale = 20
+    scale = 100
     scaled_taxi_row = int(scale * norm_taxi_row)
     scaled_taxi_col = int(scale * norm_taxi_col)
     at_station = (taxi_row, taxi_col) in stations
