@@ -4,27 +4,32 @@ import pickle
 import random
 import gym
 
+
+available = [(1, 1), (1, 1), (1, 1), (1, 1)]
 def get_state(obs):
     taxi_row, taxi_col, station1_x, station1_y, station2_x, station2_y, station3_x, station3_y, station4_x, station4_y, obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look,destination_look = obs
     sxs = [station1_x, station2_x, station3_x, station4_x]
     sys = [station1_y, station2_y, station3_y, station4_y]
     stations = [(station1_x, station1_y), (station2_x, station2_y), (station3_x, station3_y), (station4_x, station4_y)]
-    grid_size = max(sys) + 1
-    at_edge = taxi_row == 0 or taxi_row == grid_size - 1 or taxi_col == 0 or taxi_col == grid_size - 1
-    at_right_edge = taxi_row == grid_size - 1
-    at_left_edge = taxi_row == 0
-    at_up_edge = taxi_col == 0
-    at_down_edge = taxi_col == grid_size -1
-    norm_taxi_row = taxi_row / grid_size
-    norm_taxi_col = taxi_col / grid_size
-    scale = 100
-    scaled_taxi_row = int(scale * norm_taxi_row)
-    scaled_taxi_col = int(scale * norm_taxi_col)
+    stations_relative = [(taxi_row - station[0], taxi_col - station[1]) for station in stations]
+    stations_direction = [(int(rel[0] / abs(rel[0]) if rel[0] != 0 else 0), int(rel[1] / abs(rel[1]) if rel[1] != 0 else 0)) for rel in stations_relative]
     at_station = (taxi_row, taxi_col) in stations
-    return (scaled_taxi_row, scaled_taxi_col, at_station, obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
+    if at_station:
+
+        for i in range(4):
+            if (taxi_row, taxi_col) == stations[i]:
+                if not passenger_look:
+                    available[i] = (0, available[i][1])
+                if not destination_look:
+                    available[i] = (available[i][0], 0)
+
+    return (stations_direction[0], stations_direction[1], stations_direction[2], stations_direction[3], available[0], available[1], available[2], available[3], at_station, obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
 
 # Global variable to store the Q-table.
 q_table = None
+
+def reset_available():
+    available = [(1, 1), (1, 1), (1, 1), (1, 1)]
 
 def load_q_table():
     global q_table
