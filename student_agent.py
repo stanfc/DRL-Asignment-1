@@ -35,7 +35,7 @@ def get_state(obs):
         tmp = list(visited_station)
         tmp[stations.index((taxi_row, taxi_col))] = 1
         visited_station = tuple(tmp)
-    return (visited_station, stations_relative[0], stations_relative[1], stations_relative[2], stations_relative[3], obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
+    return (obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
 
 # Global variable to store the Q-table.
 q_table = None
