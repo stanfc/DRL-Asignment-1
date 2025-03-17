@@ -6,30 +6,44 @@ import gym
 
 
 available = [(1, 1), (1, 1), (1, 1), (1, 1)]
+visited_station = (0, 0, 0, 0)
+destination = -1
+passenger = -1
+has_passenger = 0
 def get_state(obs):
+    global visited_station
     taxi_row, taxi_col, station1_x, station1_y, station2_x, station2_y, station3_x, station3_y, station4_x, station4_y, obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look,destination_look = obs
     sxs = [station1_x, station2_x, station3_x, station4_x]
     sys = [station1_y, station2_y, station3_y, station4_y]
     stations = [(station1_x, station1_y), (station2_x, station2_y), (station3_x, station3_y), (station4_x, station4_y)]
     stations_relative = [(taxi_row - station[0], taxi_col - station[1]) for station in stations]
-    stations_direction = [(int(rel[0] / abs(rel[0]) if rel[0] != 0 else 0), int(rel[1] / abs(rel[1]) if rel[1] != 0 else 0)) for rel in stations_relative]
+    stations_direction = []
+    for station_rel in stations_relative:
+        x = station_rel[0]
+        y = station_rel[1]
+        if station_rel[0] > 1:
+            x = 1
+        if station_rel[0] < -1:
+            x = -1
+        if station_rel[1] > 1:
+            y = 1
+        if station_rel[1] < -1:
+            y = -1
+        stations_direction.append((x, y))
     at_station = (taxi_row, taxi_col) in stations
-    if at_station:
-
-        for i in range(4):
-            if (taxi_row, taxi_col) == stations[i]:
-                if not passenger_look:
-                    available[i] = (0, available[i][1])
-                if not destination_look:
-                    available[i] = (available[i][0], 0)
-
-    return (stations_direction[0], stations_direction[1], stations_direction[2], stations_direction[3], available[0], available[1], available[2], available[3], at_station, obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
+    if (taxi_row, taxi_col) in stations and visited_station[stations.index((taxi_row, taxi_col))] == 0:
+        tmp = list(visited_station)
+        tmp[stations.index((taxi_row, taxi_col))] = 1
+        visited_station = tuple(tmp)
+    return (visited_station, stations_relative[0], stations_relative[1], stations_relative[2], stations_relative[3], obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
 
 # Global variable to store the Q-table.
 q_table = None
 
 def reset_available():
+    visited_station = (0, 0, 0, 0)
     available = [(1, 1), (1, 1), (1, 1), (1, 1)]
+    has_passenger = 0
 
 def load_q_table():
     global q_table
